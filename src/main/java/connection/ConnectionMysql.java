@@ -8,23 +8,44 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionMysql {
+    private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String PROPERTY_FILE_PATH = "C:\\NewHomework\\Homework1.1\\src\\main\\java\\Property.properties";
+    private Properties properties;
+    private java.sql.Connection connection;
 
-    public Connection getConn() {
-        Connection conn = null;
+    public ConnectionMysql() {
+        init();
+    }
+
+    public void init() {
         try {
-            conn = DriverManager.getConnection(getProperties().getProperty("url1"),
+            properties = getProperties();
+            Class.forName(MYSQL_DRIVER);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Failed to load driver");
+            e.printStackTrace();
+        }
+    }
+
+    public Connection getConn() throws SQLException {
+        if (connection != null && connection.isClosed()) {
+            return connection;
+        }
+        try {
+            connection = DriverManager.getConnection(getProperties().getProperty("url"),
                     getProperties().getProperty("username"),
                     getProperties().getProperty("password"));
+            return connection;
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
-        return conn;
+        return null;
     }
 
     private Properties getProperties() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("C:\\NewHomework\\Homework1.1\\src\\main\\java\\Property.properties"));
+            properties.load(new FileInputStream(PROPERTY_FILE_PATH));
         } catch (
                 IOException e) {
             e.printStackTrace();

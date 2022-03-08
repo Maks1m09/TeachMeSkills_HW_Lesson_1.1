@@ -9,9 +9,9 @@ public class Runner {
     public static void main(String[] args) {
         ConnectionMysql connectionMysql = new ConnectionMysql();
         try {
-            Utilities.fullInformation(connectionMysql.getConn());
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            Utilities.newStudent(connectionMysql.getConn());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
